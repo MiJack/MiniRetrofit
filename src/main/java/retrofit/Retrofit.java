@@ -1,20 +1,19 @@
 package retrofit;
 
-import retrofit.core.HttpCallAdapter;
-import retrofit.core.HttpConverter;
+import retrofit.core.*;
+import retrofit.core.HttpCall;
+import retrofit.engine.HttpEngine;
 import retrofit.http.HttpMethod;
 import retrofit.http.bean.HttpUrl;
 import retrofit.util.Utils;
 
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
@@ -25,13 +24,12 @@ import static retrofit.util.Utils.checkNotNull;
  * @since 2016/11/28.
  */
 public class Retrofit {
-    private final Map<Method, ServiceMethod<?, ?>> serviceMethodCache = new ConcurrentHashMap<>();
+    private final Map<Method, ServiceMethod<?,?>> serviceMethodCache = new ConcurrentHashMap<>();
 
     final HttpUrl baseUrl;
     final List<HttpConverter.Factory> converterFactories;
     final List<HttpCallAdapter.Factory> adapterFactories;
     final Map<Class, MethodAnnotationHandler> annotationHandlerMap;
-    final Map<Class, ParameterHandler> parameterHandlerMap;
     final Executor callbackExecutor;
     final boolean validateEagerly;
     final HttpEngine httpEngine;
@@ -39,8 +37,7 @@ public class Retrofit {
 
     Retrofit(HttpUrl baseUrl, List<HttpConverter.Factory> converterFactories,
              List<HttpCallAdapter.Factory> adapterFactories, Executor callbackExecutor, boolean validateEagerly,
-             HttpEngine httpEngine, Map<Class, ParameterHandler> parameterHandlerMap, Map<Class, MethodAnnotationHandler> annotationHandlerMap) {
-        this.parameterHandlerMap = parameterHandlerMap;
+             HttpEngine httpEngine, Map<Class, MethodAnnotationHandler> annotationHandlerMap) {
         this.annotationHandlerMap = annotationHandlerMap;
         this.baseUrl = baseUrl;
         this.converterFactories = converterFactories;
@@ -66,10 +63,10 @@ public class Retrofit {
                             return method.invoke(this, args);
                         }
                         //加载ServiceMethod
-                        ServiceMethod<Object, Object> serviceMethod =
+                        ServiceMethod<Object,Object> serviceMethod =
                                 (ServiceMethod<Object, Object>) loadServiceMethod(method);
                         // 生成HttpCall对象
-                        HttpCall<Object> call = new HttpCall<>(serviceMethod, args);
+                        HttpCall<Object> call = serviceMethod.httpEngine.newHttpCall(serviceMethod, args);
                         return serviceMethod.callAdapter.adapt(call);
                     }
                 });
@@ -104,18 +101,18 @@ public class Retrofit {
         return adapterFactories;
     }
 
-    public HttpCallAdapter<?, ?> callAdapter(Type returnType, Annotation[] annotations) {
+    public HttpCallAdapter<?,?> callAdapter(Type returnType, Annotation[] annotations) {
         return nextCallAdapter(null, returnType, annotations);
     }
 
-    public HttpCallAdapter<?, ?> nextCallAdapter(HttpCallAdapter.Factory skipPast, Type returnType,
+    public HttpCallAdapter<?,?> nextCallAdapter(HttpCallAdapter.Factory skipPast, Type returnType,
                                                  Annotation[] annotations) {
         checkNotNull(returnType, "returnType == null");
         checkNotNull(annotations, "annotations == null");
 
         int start = adapterFactories.indexOf(skipPast) + 1;
         for (int i = start, count = adapterFactories.size(); i < count; i++) {
-            HttpCallAdapter<?, ?> adapter = adapterFactories.get(i).get(returnType, annotations, this);
+            HttpCallAdapter<?,?> adapter = adapterFactories.get(i).get(returnType, annotations, this);
             if (adapter != null) {
                 return adapter;
             }
@@ -183,22 +180,22 @@ public class Retrofit {
         throw new IllegalArgumentException(builder.toString());
     }
 
-    public <T> HttpConverter<ResponseBody, T> responseBodyConverter(Type type, Annotation[] annotations) {
+    public <T> HttpConverter<InputStream, T> responseBodyConverter(Type type, Annotation[] annotations) {
         return nextResponseBodyConverter(null, type, annotations);
     }
 
-    public <T> HttpConverter<ResponseBody, T> nextResponseBodyConverter(HttpConverter.Factory skipPast,
+    public <T> HttpConverter<InputStream, T> nextResponseBodyConverter(HttpConverter.Factory skipPast,
                                                                         Type type, Annotation[] annotations) {
         checkNotNull(type, "type == null");
         checkNotNull(annotations, "annotations == null");
 
         int start = converterFactories.indexOf(skipPast) + 1;
         for (int i = start, count = converterFactories.size(); i < count; i++) {
-            HttpConverter<ResponseBody, ?> converter =
+            HttpConverter<InputStream, ?> converter =
                     converterFactories.get(i).responseBodyConverter(type, annotations, this);
             if (converter != null) {
                 //noinspection unchecked
-                return (HttpConverter<ResponseBody, T>) converter;
+                return (HttpConverter<InputStream, T>) converter;
             }
         }
 
@@ -243,7 +240,7 @@ public class Retrofit {
         return new Builder(this);
     }
 
-    public MethodAnnotationHandler getAnnotationHandler(Annotation annotation) {
+    public MethodAnnotationHandler getMethodAnnotationHandler(Annotation annotation) {
         return annotationHandlerMap.get(annotation.annotationType());
     }
 
@@ -254,7 +251,6 @@ public class Retrofit {
         private Executor callbackExecutor;
         private boolean validateEagerly;
         private HttpEngine httpEngine;
-        private Map<Class, ParameterHandler> parameterHandlerMap;
         private Map<Class, MethodAnnotationHandler> annotationHandlerMap;
 
         public Builder() {
@@ -262,8 +258,6 @@ public class Retrofit {
             // ensures correct behavior when using converters that consume all types.
 
             converterFactories.add(new BuiltInConverters());
-            parameterHandlerMap = new HashMap<>();
-
 
             annotationHandlerMap = new HashMap<>();
             HttpMethodAnnotationHandler handler = new HttpMethodAnnotationHandler();
@@ -292,14 +286,6 @@ public class Retrofit {
         public Builder engine(HttpEngine engine) {
             checkNotNull(engine, "client == null");
             this.httpEngine = engine;
-            return this;
-        }
-
-        public Builder addParameterHandler(Class annotationClass, ParameterHandler parameterHandler) {
-            if (!annotationClass.isAnnotation()) {
-                throw new IllegalArgumentException(Utils.format("%s isn't an annotation", annotationClass));
-            }
-            parameterHandlerMap.put(annotationClass, parameterHandler);
             return this;
         }
 
@@ -368,7 +354,7 @@ public class Retrofit {
             List<HttpConverter.Factory> converterFactories = new ArrayList<>(this.converterFactories);
 
             return new Retrofit(baseUrl, converterFactories, adapterFactories,
-                    callbackExecutor, validateEagerly, httpEngine, parameterHandlerMap, annotationHandlerMap);
+                    callbackExecutor, validateEagerly, httpEngine, annotationHandlerMap);
         }
     }
 }

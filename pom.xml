@@ -6,6 +6,7 @@
 
     <groupId>com.mijack.retrofit</groupId>
     <artifactId>RetrofitProject</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <build>
         <plugins>
@@ -19,6 +20,12 @@
             </plugin>
         </plugins>
     </build>
+    <modules>
+        <module>engine</module>
+        <module>demo</module>
+        <module>CallAdapter</module>
+        <module>conveter</module>
+    </modules>
     <repositories>
         <repository>
             <id>aliyun</id>

@@ -1,6 +1,5 @@
 package retrofit.core;
 
-import retrofit.HttpCall;
 import retrofit.Retrofit;
 import retrofit.util.Utils;
 
@@ -13,7 +12,7 @@ import java.lang.reflect.Type;
  * @since 2016/12/17.
  */
 
-public interface HttpCallAdapter<R, T> {
+public interface HttpCallAdapter<T, R> {
 
     Type responseType();
 

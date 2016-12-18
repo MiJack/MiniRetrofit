@@ -1,6 +1,6 @@
-package retrofit;
+package retrofit.core;
 
-import retrofit.core.HttpCallAdapter;
+import retrofit.Retrofit;
 import retrofit.util.Utils;
 
 import java.lang.annotation.Annotation;
@@ -11,7 +11,7 @@ import java.lang.reflect.Type;
  * @since 2016/12/17.
  */
 
-final class DefaultCallAdapterFactory extends HttpCallAdapter.Factory {
+public final class DefaultCallAdapterFactory extends HttpCallAdapter.Factory {
     static final HttpCallAdapter.Factory INSTANCE = new DefaultCallAdapterFactory();
 
     @Override
@@ -21,7 +21,7 @@ final class DefaultCallAdapterFactory extends HttpCallAdapter.Factory {
         }
 
         final Type responseType = Utils.getCallResponseType(returnType);
-        return new HttpCallAdapter<Object, HttpCall<?>>() {
+        return new HttpCallAdapter<HttpCall<Object>, Object>() {
 
             public Type responseType() {
                 return responseType;

@@ -1,4 +1,6 @@
-package retrofit;
+package retrofit.core;
+
+import retrofit.ServiceMethod;
 
 import java.lang.annotation.Annotation;
 

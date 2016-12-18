@@ -1,5 +1,6 @@
-package retrofit;
+package retrofit.core;
 
+import retrofit.ServiceMethod;
 import retrofit.http.*;
 import retrofit.http.bean.HttpHeaders;
 import retrofit.http.bean.MediaType;

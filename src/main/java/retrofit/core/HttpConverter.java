@@ -1,10 +1,10 @@
 package retrofit.core;
 
 import retrofit.RequestBody;
-import retrofit.ResponseBody;
 import retrofit.Retrofit;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -16,8 +16,8 @@ public interface HttpConverter<F, T> {
     T convert(F value) throws IOException;
 
     class Factory {
-        public HttpConverter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations,
-                                                                    Retrofit retrofit) {
+        public HttpConverter<InputStream, ?> responseBodyConverter(Type type, Annotation[] annotations,
+                                                                   Retrofit retrofit) {
             return null;
         }
 
