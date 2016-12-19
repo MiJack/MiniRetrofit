@@ -21,22 +21,22 @@ public class Client {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         Api api = retrofit.create(Api.class);
-        api.getUser3("mijack");
-//        api.getUser2("mijack").subscribe(new Subscriber<User>() {
-//            @Override
-//            public void onCompleted() {
-//                System.out.println("onCompleted");
-//            }
-//
-//            @Override
-//            public void onError(Throwable throwable) {
-//                System.out.println(throwable);
-//            }
-//
-//            @Override
-//            public void onNext(User user) {
-//                System.out.println("user:" + user.login);
-//            }
-//        });
+        System.out.println(api.getUser3("mijack").execute().body());
+        api.getUser2("chih").subscribe(new Subscriber<User>() {
+            @Override
+            public void onCompleted() {
+                System.out.println("onCompleted");
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                System.out.println(throwable);
+            }
+
+            @Override
+            public void onNext(User user) {
+                System.out.println("user:" + user.login);
+            }
+        });
     }
 }

@@ -18,12 +18,13 @@ package retrofit.conveter.gson;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import retrofit.ResponseBody;
 import retrofit.core.HttpConverter;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-final class GsonResponseBodyConverter<T> implements HttpConverter<ResponseBody, T> {
+final class GsonResponseBodyConverter<T> implements HttpConverter<InputStream, T> {
   private final Gson gson;
   private final TypeAdapter<T> adapter;
 
@@ -32,8 +33,8 @@ final class GsonResponseBodyConverter<T> implements HttpConverter<ResponseBody, 
     this.adapter = adapter;
   }
 
-  @Override public T convert(ResponseBody value) throws IOException {
-    JsonReader jsonReader = gson.newJsonReader(value.charStream());
+  @Override public T convert(InputStream value) throws IOException {
+    JsonReader jsonReader = gson.newJsonReader(new InputStreamReader(value));
     try {
       return adapter.read(jsonReader);
     } finally {

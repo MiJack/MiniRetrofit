@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.google.gson.reflect.TypeToken;
 import retrofit.RequestBody;
-import retrofit.ResponseBody;
 import retrofit.Retrofit;
 import retrofit.core.HttpConverter;
 
+import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
@@ -30,7 +30,7 @@ public final class GsonConverterFactory extends HttpConverter.Factory {
         }
     }
 
-    public HttpConverter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
+    public HttpConverter<InputStream, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
         TypeAdapter adapter = this.gson.getAdapter(TypeToken.get(type));
         return new GsonResponseBodyConverter(this.gson, adapter);
     }
