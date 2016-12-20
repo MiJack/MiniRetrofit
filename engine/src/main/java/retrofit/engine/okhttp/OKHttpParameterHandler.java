@@ -221,8 +221,8 @@ public class OKHttpParameterHandler {
 
         @Override
         public void apply(RequestBuilder builder, MultipartBody.Part value) throws IOException {
-            if (value != null) { // Skip null values.
-                builder.addPart(value);
+            if (value != null && builder instanceof OkHttpRequestBuilder) { // Skip null values.
+                ((OkHttpRequestBuilder)builder).addPart(value);
             }
         }
     }

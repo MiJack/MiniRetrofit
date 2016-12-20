@@ -1,7 +1,12 @@
 package retrofit.engine.okhttp;
 
 import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okio.BufferedSink;
 import retrofit.http.bean.HttpHeaders;
+
+import java.io.IOException;
 
 /**
  * @author Mr.Yuan
@@ -22,5 +27,23 @@ public class OkHttpUtils {
             builder.add(name, headers.get(name));
         }
         return builder.build();
+    }
+
+    public static okhttp3.MediaType toContentType(retrofit.http.bean.MediaType mediaType) {
+        return okhttp3.MediaType.parse(mediaType.type());
+    }
+
+    public static okhttp3.RequestBody toOkHttpRequestBody(final retrofit.RequestBody body) {
+        return new RequestBody() {
+            @Override
+            public MediaType contentType() {
+                return OkHttpUtils.toContentType(body.getMediaType());
+            }
+
+            @Override
+            public void writeTo(BufferedSink bufferedSink) throws IOException {
+                bufferedSink.write(body.getByteString());
+            }
+        };
     }
 }

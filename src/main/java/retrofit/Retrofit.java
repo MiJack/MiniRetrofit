@@ -1,9 +1,11 @@
 package retrofit;
 
 import retrofit.core.*;
-import retrofit.core.HttpCall;
 import retrofit.engine.HttpEngine;
+import retrofit.http.FormUrlEncoded;
+import retrofit.http.Headers;
 import retrofit.http.HttpMethod;
+import retrofit.http.Multipart;
 import retrofit.http.bean.HttpUrl;
 import retrofit.util.Utils;
 
@@ -13,7 +15,10 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.lang.reflect.Type;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
@@ -269,6 +274,9 @@ public class Retrofit {
             addMethodAnnotationHandler(HttpMethod.GET.class, handler);
             addMethodAnnotationHandler(HttpMethod.DELETE.class, handler);
             addMethodAnnotationHandler(HttpMethod.HEAD.class, handler);
+            addMethodAnnotationHandler(Headers.class,handler);
+            addMethodAnnotationHandler(Multipart.class,handler);
+            addMethodAnnotationHandler(FormUrlEncoded.class,handler);
         }
 
         public Builder(Retrofit retrofit) {
@@ -348,7 +356,7 @@ public class Retrofit {
             // Make a defensive copy of the adapters and add the default Call adapter.
             List<HttpCallAdapter.Factory> adapterFactories = new ArrayList<>(this.adapterFactories);
             //remove it
-            adapterFactories.add(new DefaultCallAdapterFactory());
+            adapterFactories.add(DefaultCallAdapterFactory.getInstance());
 
             // Make a defensive copy of the converters.
             List<HttpConverter.Factory> converterFactories = new ArrayList<>(this.converterFactories);

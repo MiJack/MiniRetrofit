@@ -159,19 +159,19 @@ public class OkHttpRequestBuilder extends retrofit.RequestBuilder {
     }
 
     @Override
-    public void addPart(retrofit.http.bean.HttpHeaders headers, Object body) {
-        RequestBody part = (RequestBody) body;
+    public void addPart(retrofit.http.bean.HttpHeaders headers, final retrofit.RequestBody body) {
+        RequestBody part = OkHttpUtils.toOkHttpRequestBody(body);
         multipartBuilder.addPart(OkHttpUtils.toHeaders(headers), part);
     }
 
     @Override
-    public void setBody(Object body) {
-        this.body = (RequestBody) body;
+    public void setBody(retrofit.RequestBody body) {
+        this.body = OkHttpUtils.toOkHttpRequestBody(body);
     }
 
     @Override
-    public void addPart(Object part) {
-        multipartBuilder.addPart((MultipartBody.Part) part);
+    public void addPart(retrofit.RequestBody part) {
+        addPart(null, part);
     }
 
 
@@ -215,6 +215,10 @@ public class OkHttpRequestBuilder extends retrofit.RequestBuilder {
                 .url(url)
                 .method(method, body)
                 .build();
+    }
+
+    public void addPart(MultipartBody.Part part) {
+        multipartBuilder.addPart(part);
     }
 
     private static class ContentTypeOverridingRequestBody extends RequestBody {

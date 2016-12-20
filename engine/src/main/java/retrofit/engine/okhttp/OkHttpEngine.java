@@ -33,8 +33,12 @@ public class OkHttpEngine extends HttpEngine {
     OkHttpClient okHttpClient;
 
     public OkHttpEngine() {
-        okHttpClient = new OkHttpClient.Builder()
-                .build();
+        this(new OkHttpClient.Builder()
+                .build());
+    }
+
+    public OkHttpEngine(OkHttpClient okHttpClient) {
+        this.okHttpClient = okHttpClient;
     }
 
     @Override

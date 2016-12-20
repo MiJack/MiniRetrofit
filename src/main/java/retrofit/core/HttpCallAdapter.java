@@ -3,6 +3,7 @@ package retrofit.core;
 import retrofit.Retrofit;
 import retrofit.util.Utils;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

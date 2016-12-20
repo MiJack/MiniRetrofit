@@ -22,11 +22,11 @@ public abstract class RequestBuilder {
 
     public abstract void addFormField(String name, String value, boolean encoded);
 
-    public abstract void addPart(HttpHeaders headers, Object body);
+    public abstract void addPart(HttpHeaders headers, RequestBody body);
 
-    public abstract void addPart(Object part);
+    public abstract void addPart(RequestBody part);
 
-    public abstract void setBody(Object body);
+    public abstract void setBody(RequestBody body);
 
     public abstract <T> T build();
 }
