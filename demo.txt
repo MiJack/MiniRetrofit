@@ -1,0 +1,28 @@
+retrofit
+  ├── core
+  │   ├── BuiltInConverters
+  │   ├── DefaultCallAdapterFactory
+  │   ├── HttpCallAdapter
+  │   ├── HttpCall
+  │   ├── HttpConverter
+  │   ├── HttpMethodAnnotationHandler
+  │   ├── MethodAnnotationHandler
+  │   └── ParameterHandler
+  ├── engine
+  │   ├── HttpCallback
+  │   └── HttpEngine
+  ├── http
+  │   ├── bean
+  │   │   ├── HttpHeaders
+  │   │   ├── HttpRequest
+  │   │   ├── HttpResponse
+  │   │   └── MediaType
+  │   └── 一些注解、Body,Field、FieldMap、FormUrlEncoded、Header、HeaderMap、Headers、HttpMethod、Multipart、Part、PartMap、Path、Query、QueryMap、Streaming、Url
+  ├── RequestBody
+  ├── RequestBuilder
+  ├── ResponseBody
+  ├── Retrofit
+  ├── ServiceMethod
+  └── util
+      ├── HttpDate
+      └── Utils

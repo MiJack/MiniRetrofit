@@ -10,7 +10,7 @@ import retrofit.ServiceMethod;
 import retrofit.core.HttpCall;
 import retrofit.core.HttpConverter;
 import retrofit.core.ParameterHandler;
-import retrofit.engine.HttpCallback;
+import retrofit.HttpCallback;
 import retrofit.engine.HttpEngine;
 import retrofit.http.*;
 import retrofit.http.bean.HttpHeaders;

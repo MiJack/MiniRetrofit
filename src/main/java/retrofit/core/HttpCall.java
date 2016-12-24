@@ -1,7 +1,7 @@
 package retrofit.core;
 
 import retrofit.ServiceMethod;
-import retrofit.engine.HttpCallback;
+import retrofit.HttpCallback;
 import retrofit.engine.HttpEngine;
 import retrofit.http.bean.HttpRequest;
 import retrofit.http.bean.HttpResponse;

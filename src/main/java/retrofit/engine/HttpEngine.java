@@ -1,5 +1,6 @@
 package retrofit.engine;
 
+import retrofit.HttpCallback;
 import retrofit.Retrofit;
 import retrofit.ServiceMethod;
 import retrofit.core.HttpCall;
