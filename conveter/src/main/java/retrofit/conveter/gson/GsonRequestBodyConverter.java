@@ -20,9 +20,8 @@ import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonWriter;
 import okio.Buffer;
 import retrofit.RequestBody;
-import retrofit.Retrofit;
 import retrofit.core.HttpConverter;
-import retrofit.http.bean.MediaType;
+import retrofit.MediaType;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;

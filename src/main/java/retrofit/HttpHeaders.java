@@ -1,4 +1,4 @@
-package retrofit.http.bean;
+package retrofit;
 
 import retrofit.util.HttpDate;
 import retrofit.util.Utils;

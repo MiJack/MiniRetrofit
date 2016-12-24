@@ -1,7 +1,6 @@
-package retrofit;
+package retrofit.core;
 
-import retrofit.core.HttpCall;
-import retrofit.http.bean.HttpResponse;
+import retrofit.HttpResponse;
 
 /**
  * @author Mr.Yuan

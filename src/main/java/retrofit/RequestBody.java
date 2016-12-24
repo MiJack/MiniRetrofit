@@ -1,7 +1,6 @@
 package retrofit;
 
 import okio.ByteString;
-import retrofit.http.bean.MediaType;
 
 /**
  * @author Mr.Yuan

@@ -4,7 +4,7 @@ import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okio.BufferedSink;
-import retrofit.http.bean.HttpHeaders;
+import retrofit.HttpHeaders;
 
 import java.io.IOException;
 
@@ -29,7 +29,7 @@ public class OkHttpUtils {
         return builder.build();
     }
 
-    public static okhttp3.MediaType toContentType(retrofit.http.bean.MediaType mediaType) {
+    public static okhttp3.MediaType toContentType(retrofit.MediaType mediaType) {
         return okhttp3.MediaType.parse(mediaType.type());
     }
 

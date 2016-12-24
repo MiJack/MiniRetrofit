@@ -4,7 +4,7 @@ package retrofit.adapter.rxjava;
 import retrofit.Retrofit;
 import retrofit.core.HttpCall;
 import retrofit.core.HttpCallAdapter;
-import retrofit.http.bean.HttpResponse;
+import retrofit.HttpResponse;
 import rx.*;
 import rx.exceptions.Exceptions;
 import rx.functions.Func1;

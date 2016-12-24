@@ -8,7 +8,6 @@ import java.lang.reflect.Array;
 /**
  * @author Mr.Yuan
  * @since 2016/12/17.
-// * @param <Q> engine中可设置的Request类型
  * @param <T> 对应的值
  */
 public abstract class ParameterHandler< T> {

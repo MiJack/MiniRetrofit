@@ -1,10 +1,7 @@
 package retrofit.core;
 
+import retrofit.HttpResponse;
 import retrofit.ServiceMethod;
-import retrofit.HttpCallback;
-import retrofit.engine.HttpEngine;
-import retrofit.http.bean.HttpRequest;
-import retrofit.http.bean.HttpResponse;
 
 import java.io.IOException;
 
@@ -59,8 +56,6 @@ public abstract class HttpCall<T> {
     }
 
     public abstract HttpCall<T> clone();
-
-    public abstract HttpRequest request();
 
     public void setHttpEngine(HttpEngine httpEngine) {
         this.httpEngine = httpEngine;

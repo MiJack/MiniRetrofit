@@ -1,4 +1,4 @@
-package retrofit.http.bean;
+package retrofit;
 
 import java.nio.charset.Charset;
 import java.util.Locale;

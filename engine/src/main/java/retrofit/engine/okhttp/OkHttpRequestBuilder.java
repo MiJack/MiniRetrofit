@@ -30,9 +30,9 @@ public class OkHttpRequestBuilder extends retrofit.RequestBuilder {
     private RequestBody body;
 
 
-    public OkHttpRequestBuilder(String httpMethod, retrofit.http.bean.HttpUrl baseUrl, String relativeUrl,
-                                retrofit.http.bean.HttpHeaders headers,
-                                retrofit.http.bean.MediaType contentType, boolean hasBody, boolean isFormEncoded,
+    public OkHttpRequestBuilder(String httpMethod, retrofit.HttpUrl baseUrl, String relativeUrl,
+                                retrofit.HttpHeaders headers,
+                                retrofit.MediaType contentType, boolean hasBody, boolean isFormEncoded,
                                 boolean isMultipart) {
         super(httpMethod, baseUrl, relativeUrl, headers, contentType, hasBody, isFormEncoded, isMultipart);
 
@@ -159,7 +159,7 @@ public class OkHttpRequestBuilder extends retrofit.RequestBuilder {
     }
 
     @Override
-    public void addPart(retrofit.http.bean.HttpHeaders headers, final retrofit.RequestBody body) {
+    public void addPart(retrofit.HttpHeaders headers, final retrofit.RequestBody body) {
         RequestBody part = OkHttpUtils.toOkHttpRequestBody(body);
         multipartBuilder.addPart(OkHttpUtils.toHeaders(headers), part);
     }

@@ -1,12 +1,11 @@
 package retrofit;
 
 import retrofit.core.*;
-import retrofit.engine.HttpEngine;
+import retrofit.core.HttpEngine;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.Headers;
 import retrofit.http.HttpMethod;
 import retrofit.http.Multipart;
-import retrofit.http.bean.HttpUrl;
 import retrofit.util.Utils;
 
 import java.io.InputStream;

@@ -4,11 +4,8 @@ import retrofit.core.HttpCallAdapter;
 import retrofit.core.HttpConverter;
 import retrofit.core.MethodAnnotationHandler;
 import retrofit.core.ParameterHandler;
-import retrofit.engine.HttpEngine;
+import retrofit.core.HttpEngine;
 import retrofit.http.*;
-import retrofit.http.bean.HttpHeaders;
-import retrofit.http.bean.HttpUrl;
-import retrofit.http.bean.MediaType;
 import retrofit.util.Utils;
 
 import java.io.InputStream;

@@ -2,7 +2,7 @@ package retrofit.adapter.rxjava;
 
 import retrofit.core.HttpCall;
 import retrofit.core.HttpCallAdapter;
-import retrofit.http.bean.HttpResponse;
+import retrofit.HttpResponse;
 import rx.Completable;
 import rx.Scheduler;
 import rx.Subscription;

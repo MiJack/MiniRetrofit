@@ -5,7 +5,7 @@ import retrofit.RequestBody;
 import retrofit.RequestBuilder;
 import retrofit.core.HttpConverter;
 import retrofit.core.ParameterHandler;
-import retrofit.http.bean.HttpHeaders;
+import retrofit.HttpHeaders;
 
 import java.io.IOException;
 import java.util.Map;

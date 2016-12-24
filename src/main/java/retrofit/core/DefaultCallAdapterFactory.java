@@ -1,7 +1,7 @@
 package retrofit.core;
 
+import retrofit.HttpResponse;
 import retrofit.Retrofit;
-import retrofit.http.bean.HttpResponse;
 import retrofit.util.Utils;
 
 import java.io.IOException;

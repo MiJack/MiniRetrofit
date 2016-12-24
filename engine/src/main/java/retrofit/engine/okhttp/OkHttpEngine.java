@@ -1,20 +1,16 @@
 package retrofit.engine.okhttp;
 
 import okhttp3.*;
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
 import okio.Buffer;
 import okio.BufferedSource;
 import okio.ForwardingSource;
 import okio.Okio;
-import retrofit.Retrofit;
-import retrofit.ServiceMethod;
-import retrofit.core.HttpCall;
-import retrofit.core.HttpConverter;
-import retrofit.core.ParameterHandler;
-import retrofit.HttpCallback;
-import retrofit.engine.HttpEngine;
+import retrofit.*;
+import retrofit.RequestBody;
+import retrofit.core.*;
 import retrofit.http.*;
-import retrofit.http.bean.HttpHeaders;
-import retrofit.http.bean.HttpResponse;
 import retrofit.util.Utils;
 
 import java.io.IOException;
@@ -78,29 +74,20 @@ public class OkHttpEngine extends HttpEngine {
         return parseResponse(httpCall, call.execute());
     }
 
+    @Override
+    protected RequestBuilder newRequestBuilder(ServiceMethod serviceMethod) {
+        return new OkHttpRequestBuilder(serviceMethod.httpMethod,
+                serviceMethod.baseUrl, serviceMethod.relativeUrl, serviceMethod.headers,
+                serviceMethod.contentType, serviceMethod.hasBody, serviceMethod.isFormEncoded,
+                serviceMethod.isMultipart);
+    }
+
     private Call createRawCall(OkHttpCall okHttpCall) throws IOException {
-        okhttp3.Request request = toRequest(okHttpCall.serviceMethod, okHttpCall.args);
+        okhttp3.Request request = (Request) toRequest(okHttpCall.serviceMethod, okHttpCall.args);
         okhttp3.Call call = okHttpClient.newCall(request);
         return call;
     }
 
-    private Request toRequest(ServiceMethod serviceMethod, Object[] args) throws IOException {
-        retrofit.RequestBuilder builder = new OkHttpRequestBuilder(serviceMethod.httpMethod,
-                serviceMethod.baseUrl, serviceMethod.relativeUrl, serviceMethod.headers,
-                serviceMethod.contentType, serviceMethod.hasBody, serviceMethod.isFormEncoded,
-                serviceMethod.isMultipart);
-        ParameterHandler[] handlers = serviceMethod.parameterHandlers;
-        int argumentCount = args != null ? args.length : 0;
-        if (argumentCount != handlers.length) {
-            throw new IllegalArgumentException("Argument count (" + argumentCount
-                    + ") doesn't match expected count (" + handlers.length + ")");
-        }
-
-        for (int p = 0; p < argumentCount; p++) {
-            handlers[p].apply(builder, args[p]);
-        }
-        return (Request) builder.build();
-    }
 
     private <T> HttpResponse<T, okhttp3.Response, okhttp3.ResponseBody> parseResponse(
             HttpCall<T> httpCall, Response rawResponse) throws IOException {
@@ -421,7 +408,7 @@ public class OkHttpEngine extends HttpEngine {
                         throw new IllegalArgumentException("@Part parameters using the MultipartBody.Part must not "
                                 + "include a part name in the annotation.");
                     }
-                    HttpConverter<?, retrofit.RequestBody> converter =
+                    HttpConverter<?, RequestBody> converter =
                             retrofit.requestBodyConverter(iterableType, annotations, methodAnnotations);
                     return new OKHttpParameterHandler.Part<>(headers, converter).iterable();
                 } else if (rawParameterType.isArray()) {
@@ -430,14 +417,14 @@ public class OkHttpEngine extends HttpEngine {
                         throw new IllegalArgumentException("@Part parameters using the MultipartBody.Part must not "
                                 + "include a part name in the annotation.");
                     }
-                    HttpConverter<?, retrofit.RequestBody> converter =
+                    HttpConverter<?, RequestBody> converter =
                             retrofit.requestBodyConverter(arrayComponentType, annotations, methodAnnotations);
                     return new OKHttpParameterHandler.Part<>(headers, converter).array();
                 } else if (MultipartBody.Part.class.isAssignableFrom(rawParameterType)) {
                     throw new IllegalArgumentException("@Part parameters using the MultipartBody.Part must not "
                             + "include a part name in the annotation.");
                 } else {
-                    HttpConverter<?, retrofit.RequestBody> converter =
+                    HttpConverter<?, RequestBody> converter =
                             retrofit.requestBodyConverter(type, annotations, methodAnnotations);
                     return new OKHttpParameterHandler.Part<>(headers, converter);
                 }
@@ -468,7 +455,7 @@ public class OkHttpEngine extends HttpEngine {
                         + "Use @Part List<Part> or a different value type instead.");
             }
 
-            HttpConverter<?, retrofit.RequestBody> valueConverter =
+            HttpConverter<?, RequestBody> valueConverter =
                     retrofit.requestBodyConverter(valueType, annotations, methodAnnotations);
 
             PartMap partMap = (PartMap) annotation;
@@ -483,7 +470,7 @@ public class OkHttpEngine extends HttpEngine {
 //                throw parameterError(p, "Multiple @Body method annotations found.");
 //            }
 
-            HttpConverter<?, retrofit.RequestBody> converter;
+            HttpConverter<?, RequestBody> converter;
             try {
                 converter = retrofit.requestBodyConverter(type, annotations, methodAnnotations);
             } catch (RuntimeException e) {

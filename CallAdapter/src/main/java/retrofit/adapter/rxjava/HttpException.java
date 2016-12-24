@@ -1,6 +1,6 @@
 package retrofit.adapter.rxjava;
 
-import retrofit.http.bean.HttpResponse;
+import retrofit.HttpResponse;
 
 /**
  * @author Mr.Yuan

@@ -2,9 +2,10 @@ package demo;
 
 import okhttp3.Response;
 import okhttp3.ResponseBody;
+import retrofit.RequestBody;
 import retrofit.core.HttpCall;
 import retrofit.http.*;
-import retrofit.http.bean.HttpResponse;
+import retrofit.HttpResponse;
 
 /**
  * @author Mr.Yuan
@@ -20,8 +21,20 @@ public interface Api {
     HttpCall<User> getUser3(@Path("user") String user);
     @HttpMethod.POST("/post")
     @FormUrlEncoded
-    HttpCall<retrofit.ResponseBody> post(@Field("first_name") String first, @Field("last_name") String last);
+    HttpCall<retrofit.ResponseBody> post(
+            @Field("first_name") String first,
+            @Field("last_name") String last);
+
+
     @HttpMethod.POST("/post")
     @Multipart
-    HttpCall<retrofit.ResponseBody> postPart(@Part("first_name") String first, @Part("last_name") String last);
+    HttpCall<retrofit.ResponseBody> postPart(
+            @Part("first_name") String first,
+            @Part("last_name") String last);
+
+
+    @HttpMethod.POST("/post")
+    @Multipart
+    HttpCall<retrofit.ResponseBody> postPart(@Part("first_name") String first, @Part("last_name") String last,
+                                             @Part("file") RequestBody requestBody);
 }

@@ -1,9 +1,9 @@
 package retrofit.core;
 
+import retrofit.HttpHeaders;
+import retrofit.MediaType;
 import retrofit.ServiceMethod;
 import retrofit.http.*;
-import retrofit.http.bean.HttpHeaders;
-import retrofit.http.bean.MediaType;
 
 import java.lang.annotation.Annotation;
 import java.util.LinkedHashSet;

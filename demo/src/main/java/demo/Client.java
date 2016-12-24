@@ -6,7 +6,7 @@ import retrofit.Retrofit;
 import retrofit.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit.conveter.gson.GsonConverterFactory;
 import retrofit.engine.okhttp.OkHttpEngine;
-import rx.Subscriber;
+import retrofit.HttpResponse;
 
 import java.io.IOException;
 
@@ -16,22 +16,35 @@ import java.io.IOException;
  */
 public class Client {
     public static void main(String[] args) throws IOException {
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor(
+                new HttpLoggingInterceptor.Logger() {
             @Override
             public void log(String s) {
                 System.out.println(s);
             }
         });
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .build();
+        OkHttpEngine engine = new OkHttpEngine(client);
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.github.com")
-                .engine(new OkHttpEngine(client))
+                .engine(engine)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         Api api = retrofit.create(Api.class);
-        System.out.println(api.postPart("mijack","yuan").execute().body());
+//        HttpCall<User> mijack = api.getUser("mijack");
+//        User user = mijack.execute().body();
+//        System.out.println("mijack's login is " + user.login);
+
+        HttpResponse execute = api
+                .post("Yuan", "Yujie")
+                .execute();
+        Object body = execute.body();
+
+
 //        api.getUser2("chih").subscribe(new Subscriber<User>() {
 //            @Override
 //            public void onCompleted() {

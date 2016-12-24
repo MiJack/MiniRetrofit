@@ -3,7 +3,6 @@ package retrofit.engine.okhttp;
 import okhttp3.Call;
 import retrofit.ServiceMethod;
 import retrofit.core.HttpCall;
-import retrofit.http.bean.HttpRequest;
 
 /**
  * @author Mr.Yuan
@@ -21,8 +20,4 @@ public class OkHttpCall<T> extends HttpCall<T> {
         return new OkHttpCall<T>((ServiceMethod<T, Object>) serviceMethod, args);
     }
 
-    @Override
-    public HttpRequest request() {
-        return null;
-    }
 }
