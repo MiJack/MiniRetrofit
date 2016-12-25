@@ -116,7 +116,7 @@ public class OkHttpEngine extends HttpEngine {
 
         ExceptionCatchingRequestBody catchingBody = new ExceptionCatchingRequestBody(rawBody);
         try {
-            T body = httpCall.serviceMethod.responseConverter.convert(catchingBody.byteStream());// httpCall.serviceMethod.toResponse(catchingBody);
+            T body = httpCall.toResponseBody(catchingBody.byteStream());// httpCall.serviceMethod.toResponse(catchingBody);
             return success(body, rawResponse);
         } catch (RuntimeException e) {
             // If the underlying source threw an exception, propagate that rather than indicating it was

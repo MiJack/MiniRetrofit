@@ -4,6 +4,7 @@ import retrofit.HttpResponse;
 import retrofit.ServiceMethod;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @param <T> response对应的目标类型
@@ -29,8 +30,8 @@ public abstract class HttpCall<T> {
         httpEngine = serviceMethod.httpEngine;
     }
 
-    public HttpCall<T> httpEngine(HttpEngine httpEngine) {
-        return httpEngine.newHttpCall(serviceMethod, args);
+    public T toResponseBody(InputStream inputStream) throws IOException {
+        return serviceMethod.responseConverter.convert(inputStream);
     }
 
     public HttpResponse<T, ?, ?> execute() throws IOException {
@@ -41,6 +42,9 @@ public abstract class HttpCall<T> {
         httpEngine.execute(this, callback);
     }
 
+    public HttpCall<T> httpEngine(HttpEngine httpEngine) {
+        return httpEngine.newHttpCall(serviceMethod, args);
+    }
 
     public boolean isExecuted() {
         return executed;
